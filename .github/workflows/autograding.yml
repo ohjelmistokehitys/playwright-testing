@@ -10,7 +10,7 @@ permissions:
 jobs:
   run-autograding-tests:
     runs-on: ubuntu-latest
-    if: github.actor != 'github-classroom[bot]'
+    if: (github.event_name != 'push' || github.event.head_commit.message != 'Initial commit')
     env:
       CI: true
 

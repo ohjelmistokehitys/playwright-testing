@@ -4,13 +4,13 @@
     "tests": [
         {
             "name": "Run tests and extract traces",
-            "description": "Run the Playwright tests and extract traces for further analysis.",
+            "description": "Run the Playwright tests and extract traces for further analysis. Passing this step does not guarantee that your tests covered the required functionality, which is checked by the subsequent tests.",
             "run": [
-                "npx playwright test --reporter=list,html --project=chromium --trace=on -G examples",
+                "npx playwright test --reporter=list,html --project=chromium --trace=on --grep-invert examples",
                 "./.grading/extract_traces.sh"
             ],
             "timeout": "2m",
-            "score": 10,
+            "score": 0,
             "skipRemainingOnFailure": true
         },
         {
@@ -25,14 +25,14 @@
             "description": "Checks that an incorrect email address was rejected during your tests.",
             "run": "./.grading/find_trace.sh 'Please enter a valid email address.'",
             "timeout": "15s",
-            "score": 5
+            "score": 10
         },
         {
             "name": "Login password is validated",
             "description": "Checks that a short password was rejected during your tests.",
             "run": "./.grading/find_trace.sh 'Password must be at least 6 characters long.'",
             "timeout": "15s",
-            "score": 5
+            "score": 10
         },
         {
             "name": "Correct credentials are used",
