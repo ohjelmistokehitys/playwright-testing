@@ -215,7 +215,7 @@ Kun olet kirjoittanut testitapaukset ja varmistanut, että ne toimivat odotetust
 Automaattisessa tarkastuksessa käytetään Chrome-selainta ja testit suoritetaan yksi kerrallaan headless-tilassa. Suosittelemme varmistamaan, että testit toimivat paikallisesti seuraavalla komennolla ennen palautusta:
 
 ```bash
-npx playwright test --reporter="list,html" --project=chromium -G examples
+npx playwright test --reporter="list,html" --project=chromium --grep-invert examples
 ```
 
 Palautettuasi tehtävän testisi pisteytetään sen mukaan, kuinka hyvin ne todentavat edellä listattuja vaatimuksia.
