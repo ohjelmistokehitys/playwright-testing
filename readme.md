@@ -1,6 +1,6 @@
 # Testaaminen Playwright-työkalulla 🎭
 
-Tässä tehtävässä tavoitteena on tutustua testien suorittamiseen ja kehittämiseen Playwrightin avulla. Playwright on tehokas testauskirjasto, joka mahdollistaa monipuolisten ja luotettavien selainpohjaisten testien kirjoittamisen. Se tukee useita selaimia ja tarjoaa laajan valikoiman ominaisuuksia ja työkaluja, jotka helpottavat testien kehittämistä ja suorittamista.
+Tässä tehtävässä tavoitteena on tutustua testien suorittamiseen ja kehittämiseen Playwrightin avulla. Playwright on tehokas ja suosittu<sup>*</sup> testauskirjasto, joka mahdollistaa monipuolisten ja luotettavien selainpohjaisten testien kirjoittamisen. Se tukee useita selaimia ja tarjoaa laajan valikoiman ominaisuuksia ja työkaluja, jotka helpottavat testien kehittämistä ja suorittamista.
 
 Tehtävän tueksi tarvitset [Playwrightin omaa dokumentaatiota](https://playwright.dev/) ja opetusvideoita, jotta saat kaiken irti työkalusta ja sen ominaisuuksista. Tehtävän eri osissa on vinkkejä ja ohjeita testien kehittämiseen ja suorittamiseen, mutta ensisijaisena lähteenä toimii Playwrightin virallinen dokumentaatio: [Writing tests (playwright.dev)](https://playwright.dev/docs/writing-tests)
 
@@ -10,26 +10,43 @@ Dokumentaation lisäksi suosittelemme vahvasti katsomaan videon [Introduction to
 > Tehtävän komennot on tarkoitettu suoritettavaksi tehtävärepositorion juurihakemistossa, eli samassa hakemistossa, jossa tämä tiedosto sijaitsee. Voit siirtyä oikeaan hakemistoon komentorivillä esimerkiksi [MDN-palvelun ohjeiden avulla](https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Environment_setup/Command_line#navigation_on_the_command_line).
 
 
-## Asennukset ja testauksen lähtökohdat
+\* *Playwright-työkalulla on kirjoitushetkellä [lähes 100 000 tähteä GitHubissa](https://github.com/microsoft/playwright) ja yli 100 000 000 viikottaista latausta [npm-pakettirekisterissä](https://www.npmjs.com/package/playwright).*
 
-Playwright-testien suorittamiseksi tarvitset [Node.js-ympäristön](https://nodejs.org/). Testit voidaan suorittaa niin komentoriviltä, Visual Studio Code -editorista kuin Playwrightin UI-työkalusta. Suosittelemme asentamaan lisäksi VS Code:en [Playwright Test for VS Code -laajennuksen (ms-playwright.playwright)](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright), joka tarjoaa Playwright-testeille tukea Visual Studio Codessa. [Laajennuksen ohjeissa](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright) kerrotaan kattavasti sen ominaisuuksista ja suosittelemme lukemaan myös ohjeet.
 
-Aloita asentamalla [projektin riippuvuudet](./package.json) seuraavalla komennolla:
+## Kehitysympäristö ja asennukset
 
-```sh
-npm install
-```
+Tämä tehtävä on suunniteltu ratkaistavaksi [kehityskontissa](https://code.visualstudio.com/docs/devcontainers/containers) tai [CodeSpacessa](https://github.com/features/codespaces). Repositorio sisältää valmiin [`devcontainer.json`-tiedoston](./.devcontainer/devcontainer.json), jossa on määritetty kehitysympäristön asetukset sekä [luontiskripti](./.devcontainer/postCreate.sh). Kehityskontti eristää projektin muusta käyttöjärjestelmästä, joten sillä voi olla myös positiivisia tietoturvavaikutuksia.
 
-**Playwrightin selainten asennus**
+Playwright käyttää oikeita selaimia testien suorittamiseksi. Oletuksena testit suoritetaan "headless"-tilassa, eli ilman selaimen näyttämistä. Toisinaan voi kuitenkin olla tarpeen nähdä testien suorituksen aikana selainikkuna, jotta voidaan tarkistaa, että testit toimivat odotetusti.
+
+Kehityskontit eivät tyypillisesti tarjoa graafisia käyttöliittymiä niiden sisällä toimiville sovelluksille. Tässä kehityskontissa on valmiiksi määritettynä [Desktop Lite -ominaisuus](https://github.com/devcontainers/features/tree/main/src/desktop-lite), joka mahdollistaa kontin sisäisen käyttöliittymän avaamisen selaimessa. Kun kehityskontti on käynnissä, voit avata selaimessa osoitteen http://localhost:6080/, jossa näet, mitä kontin sisällä tapahtuu.
+
+Kehityskontissa on lisäksi valmiina [Playwright Test for VS Code -laajennus (ms-playwright.playwright)](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright), joka tarjoaa Playwright-testeille tukea Visual Studio Codessa. [Laajennuksen ohjeissa](https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright) kerrotaan kattavasti sen ominaisuuksista ja suosittelemme lukemaan myös ohjeet.
+
+
+## Playwrightin selainten asennus
 
 Playwright tukee useita selaimia, kuten Chromium, Firefox ja WebKit. Selaimet ja niiden käyttäminen on dokumentoitu tarkemmin Playwrightin dokumentaatioon https://playwright.dev/docs/browsers. Playwright ei käytä käyttöjärjestelmääsi asentamiasi selaimia, vaan se asentaa ja käyttää omia versioitaan selaimista. Tällä tavoin testit ovat eristettyjä ja toistettavissa riippumatta käyttöjärjestelmästä ja asennetuista selaimista. Testattavan sovelluksen toimivuus voidaan myös varmistaa suorittamalla samat testit samanaikaisesti useilla eri selaimilla.
 
 Asenna seuraavaksi Playwrightille yksi tai useampia playwright-selaimia:
 
 ```bash
-npx playwright install              # asenna kaikki selaimet
-npx playwright install chromium     # asenna vain chromium
+npx playwright install              # asenna kaikki selaimet (Chromium, Firefox ja WebKit)
+npx playwright install chromium     # vaihtoehtoisesti asenna vain chromium
 ```
+
+> [!NOTE]
+> Codespace- ja devcontainer-ympäristöissä ei oletuksena ole kaikkia selainten riippuvuuksia, joten ne on tyypillisesti asennettava erikseen. Tässä repositoriossa [kehityskontin luontiskriptissä](./.devcontainer/postCreate.sh) asennetaan riippuvuudet automaattisesti, mutta mikäli käytät Playwrightia muussa ympäristössä, voit asentaa selainten riippuvuudet seuraavalla komennolla:
+>
+> ```bash
+> # asentaa lisäksi riippuvuudet (development container -ympäristöjä varten):
+> npx playwright install-deps
+> ```
+>
+> Lue lisää osoitteessa https://playwright.dev/docs/browsers#install-system-dependencies
+
+
+### Selainten poistaminen
 
 Playwright asentaa selaimet tietokoneellesi erilliseen hakemistoon, josta voit halutessasi [poistaa ne seuraamalla Playwrightin ohjeita](https://playwright.dev/docs/browsers#uninstall-browsers).
 
@@ -39,24 +56,30 @@ npx playwright uninstall --all      # poistaa kaikki playwright-selaimet
 
 Lisätietoja selainten asennuksesta ja konfiguroinnista löydät Playwrightin dokumentaatiosta [https://playwright.dev/docs/browsers](https://playwright.dev/docs/browsers).
 
-**Testien suorittaminen**
+
+## Testien suorittaminen
 
 Kun olet asentanut riippuvuudet ja selaimet, voit suorittaa testit seuraavalla komennolla:
 
 ```bash
-npx playwright test     # suorita komento repositorion juurihakemistossa
+npx playwright test
 ```
+
+Tästä repositoriosta löytyy valmiina [demo-todo-app.spec.ts](./tests/examples/demo-todo-app.spec.ts)-testitiedosto, jossa on Playwrightin valmiita esimerkkejä toimintojen ja tarkastusten käytöstä. Esimerkki on lisensoitu [Apache 2.0 -lisenssillä](https://github.com/microsoft/playwright/blob/main/LICENSE).
 
 Kuten huomaat, testit suoritetaan oletuksena ns. "headless"-tilassa, eli ilman näkyvää selainikkunaa. Testit suoritetaan tyypillisesti niin nopeasti, ettei selaimen katseleminen testien aikana ole mielekästä.
 
-Playwrightin suoritusasetuksia voidaan muuttaa antamalla `npx playwright`-komennolle erilaisia argumentteja. Esimerkiksi, jos haluat suorittaa testit Chromiumilla "headed"-tilassa, eli näkyvällä selainikkunalla, voit käyttää seuraavaa komentoa:
+Playwrightin suoritusasetuksia voidaan muuttaa antamalla `npx playwright`-komennolle erilaisia argumentteja. Esimerkiksi, jos haluat suorittaa testit vain Chromiumilla ja "headed"-tilassa, eli näkyvällä selainikkunalla, voit käyttää seuraavaa komentoa:
 
 ```bash
 # suorittaa testit Chromiumilla näkyvällä selainikkunalla ja listaa testitulokset
 npx playwright test --headed --project=chromium --reporter="list,html"
 ```
 
-**UI-työkalu ja raportit**
+Lisää tietoa Playwrightin komentorivivaihtoehdoista löydät komennolla `npx playwright test --help` ja dokumentaatiosta: https://playwright.dev/docs/test-cli.
+
+
+## UI-työkalu ja raportit
 
 Mikäli haluat valita itse suoritettavat testit yksitellen ja seurata niiden suoritusta graafisesti, voit käyttää VS Code -laajennosta tai käynnistää Playwrightin UI-työkalun komennolla:
 
@@ -70,12 +93,18 @@ Viimeisimmän testisuorituksen raportin saa näkyviin omaan selaimeen komennolla
 npx playwright show-report
 ```
 
+Tarvittaessa salli raportin katsominen myös kehityskontin ulkopuolelta, pääkäyttöjärjestelmäsi selaimesta käsin:
+
+```bash
+npx playwright show-report --host 0.0.0.0
+```
+
 
 ## Testattava sivusto
 
-Testauksen kohteena toimii esimerkkisivusto https://authentication-6o1.pages.dev/, joka sisältää pienen määrän ominaisuuksia palveluun kirjautumiseksi ja käyttäjätunnusten luomiseksi. Sivusto on pyritty luomaan samalla yksinkertaiseksi, mutta myös laadukkaaksi, jotta se toimisi hyvänä ensimmäisenä testauskohteena. Laadun osalta esimerkiksi eri kenttien labelit ja virheilmoitukset on pyritty toteuttamaan niin, että niitä on helppo yksilöidä ja käsitellä ohjelmallisesti testeissä.
+Testauksen kohteena toimii esimerkkisivusto https://authentication-6o1.pages.dev/, joka sisältää pienen määrän ominaisuuksia palveluun kirjautumiseksi ja käyttäjätunnusten luomiseksi. Sivusto on pyritty luomaan samalla yksinkertaiseksi, mutta myös laadukkaaksi, jotta se toimisi hyvänä ensimmäisenä testauskohteena. Laadun osalta esimerkiksi eri kenttien label-tiedot ja virheilmoitukset on pyritty toteuttamaan niin, että niitä on helppo yksilöidä ja käsitellä ohjelmallisesti testeissä.
 
-Testattava esimerkkisivusto on toteutettu testauksen harjoittelua varten, joten se ei noudata kaikkia tavanomaisia tuotantokäytössä olevien web-sivustojen oletuksia. Suurimpana eroavaisuutena sivuston kautta tehdyt rekisteröitymiset ja kirjautumiset **ovat voimassa vain saman selaimen/istunnon sisällä**. Rekisteröitymiset ja kirjautumiset eivät siis vaikuta eri selainten tai testitapausten välillä.
+Testattava esimerkkisivusto on toteutettu testauksen harjoittelua varten, joten se ei noudata kaikkia tavanomaisia tuotantokäytössä olevien web-sivustojen oletuksia. Suurimpana eroavaisuutena sivuston kautta tehdyt rekisteröitymiset ja kirjautumiset **ovat voimassa vain saman selaimen/istunnon sisällä**. Rekisteröitymiset ja kirjautumiset eivät siis säily eri selainten tai testitapausten välillä.
 
 Playwright suorittaa testejä rinnakkain ja suoritusten järjestys ei ole taattu, joten testiselain nollataan aina jokaisen testin alussa. Yhdessä testissä tekemäsi rekisteröityminen tai kirjautuminen ei siis ole voimassa enää seuraavissa testitapauksissa.
 
@@ -104,7 +133,7 @@ Kirjautuminen onnistuu osoitteessa https://authentication-6o1.pages.dev/. Kirjau
 
 Itse luotavien tunnusten lisäksi sivustolla on kaksi valmista tunnusta, jotka ovat aina voimassa: `alice@example.com` ja `bob@example.com`:
 
-| Name  | Username          | Password                           | Env variables in GitHub \*         |
+| Nimi  | Tunnus            | Salasana                           | Ympäristömuuttujat GitHubissa \*   |
 |-------|-------------------|------------------------------------|------------------------------------|
 | Alice | alice@example.com | `}3jc\xJnQ=E=+Q_y/%Hd311bW#6{_Oyj` | `USER1_USERNAME`, `USER1_PASSWORD` |
 | Bob   | bob@example.com   | `nUL9zA3q=Nt7\N,0?CL&c74U,Ic)0)dN` | `USER2_USERNAME`, `USER2_PASSWORD` |
@@ -158,23 +187,13 @@ Lisäksi:
 * Rekisteröitymisessä luotua tiliä tulee voida käyttää kirjautumiseen heti rekisteröitymisen jälkeen *(saman testitapauksen sisällä)*.
 
 
-### Ohjeita ja esimerkkejä
-
-Näiden testien kirjoittamisen myötä tavoitteena on oppia tekemään sivun sisällölle erilaisia toimenpiteitä hyödyntäen Playwrightin tarjoamia toimintoja. Lue lisää testien kirjoittamisesta [Playwrightin dokumentaatiosta (playwright.dev)](https://playwright.dev/docs/writing-tests).
-
-Mikäli haluat tutkia esimerkkejä Playwright-testeistä, olemme lisänneet tähän repositorioon valmiiksi [demo-todo-app.spec.ts](./tests-examples/demo-todo-app.spec.ts)-tiedoston, jossa on esimerkkejä toimintojen ja tarkastusten käytöstä. Voit käyttää sitä apuna testien kirjoittamisessa ja soveltaa sen esimerkkejä omiin testitapauksiisi. Jos haluat suorittaa kyseisen tiedoston testejä, joudut siirtämään sen ensin `tests`-kansioon, jotta Playwright tunnistaa sen testitiedostoksi. Älä kuitenkaan lähetä kyseistä esimerkkitiedostoa tests-hakemistossa GitHubiin, jotta siinä olevat testit eivät sekoitu omiin ratkaisuihisi.
-
-> [!NOTE]
-> *demo-todo-app.spec.ts* on Playwrightin esimerkki, joka on lisensoitu [Apache 2.0 -lisenssillä](https://github.com/microsoft/playwright/blob/main/LICENSE). Se on lainattu tähän tehtävään opetus- ja esimerkkimateriaaliksi.
-
-
 ## 🚀 Käyttäjätunnukset ja salasanat ympäristömuuttujissa (extra)
 
 Käyttäjätunnusten, salasanojen ja API-avainten kirjoittaminen selkokielisinä testitapauksiin ei ole suositeltavaa, sillä ne voivat olla alttiita vahingossa julkaisemiselle. Tässä tapauksessa testijärjestelmän salasanat ovat julkisia, joten ongelma ei ole merkittävä, mutta on hyvä harjoitella myös salasanojen käsittelyä turvallisesti.
 
-Parempi tapa käsitellä salasanoja voisi olla salaisuuksien tallentaminen ympäristömuuttujiin tai salaisuuksiksi. Playwrightin testit voivat käyttää ympäristömuuttujia, joten voit tallentaa salasanat esimerkiksi `.env`-tiedostoon ja lukea ne testitapauksissa ympäristömuuttujista. Luomasi `.env`-tiedosto puolestaan voidaan rajata versionhallinnan ulkopuolelle [.gitignore-tiedoston](./.gitignore) avulla.
+Parempi tapa käsitellä salasanoja voisi olla niiden tallentaminen ympäristömuuttujiin tai salaisuuksiksi. Playwrightin testit voivat käyttää ympäristömuuttujia, joten voit tallentaa salasanat esimerkiksi `.env`-tiedostoon ja lukea ne testitapauksissa ympäristömuuttujista. Luomasi `.env`-tiedosto puolestaan voidaan rajata versionhallinnan ulkopuolelle [.gitignore-tiedoston](./.gitignore) avulla.
 
-Suosittelemme tutustumaan ympäristömuuttujiin ja hyödyntämään niitä tässä tehtävässä. Voit lukea lisää ympäristömuuttujista [Playwrightin dokumentaatiosta (playwright.dev)](https://playwright.dev/docs/test-parameterize#env-files). Tiedostopohjaisia ympäristömuuttujia varten tarvitset lisäksi [dotenv-paketin](https://www.npmjs.com/package/dotenv), joka tulee ottaa käyttöön [playwright.config.ts](./playwright.config.ts)-tiedoston yläosassa.
+Suosittelemme tutustumaan ympäristömuuttujiin ja hyödyntämään niitä tässä tehtävässä. Voit lukea lisää ympäristömuuttujista [Playwrightin dokumentaatiosta (playwright.dev)](https://playwright.dev/docs/test-parameterize#env-files). Playwrightin dokumentaatiossa ohjeistetaan ympäristömuuttujien käyttöä [dotenv-paketin](https://www.npmjs.com/package/dotenv) kanssa, mutta Node.js:n standardikirjastosta löytyy myös [`loadEnvFile`-funktio](https://nodejs.org/api/process.html#processloadenvfilepath), jolla ympäristömuuttujat voidaan ladata ilman ulkoisia kirjastoja.
 
 Oma `.env`-tiedosto voi näyttää esimerkiksi tältä:
 
@@ -196,10 +215,12 @@ Kun olet kirjoittanut testitapaukset ja varmistanut, että ne toimivat odotetust
 Automaattisessa tarkastuksessa käytetään Chrome-selainta ja testit suoritetaan yksi kerrallaan headless-tilassa. Suosittelemme varmistamaan, että testit toimivat paikallisesti seuraavalla komennolla ennen palautusta:
 
 ```bash
-npx playwright test --reporter="list,html" --project=chromium
+npx playwright test --reporter="list,html" --project=chromium -G examples
 ```
 
-Palautettuasi tehtävän testisi pisteytetään sen mukaan, kuinka hyvin ne todentavat edellä listattuja vaatimuksia. **On siis oleellista, että testeissäsi syötät sekä oikeita että virheellisiä tietoja ja tarkistat, että sivuston tila sekä siinä näkyvät viestit toimivat oikein**. Tarvittaessa tutki actions-välilehden raporttia ja testituloksia, jotta voit täydentää testejäsi kattamaan lisää testitapauksia.
+Palautettuasi tehtävän testisi pisteytetään sen mukaan, kuinka hyvin ne todentavat edellä listattuja vaatimuksia.
+
+**On siis oleellista, että testeissäsi syötät sekä oikeita että virheellisiä tietoja ja tarkistat, että sivuston tila sekä siinä näkyvät viestit toimivat oikein**. Tarvittaessa tutki actions-välilehden raporttia ja testituloksia, jotta voit täydentää testejäsi kattamaan lisää testitapauksia.
 
 Voit palauttaa tehtävän uudelleen useita kertoa tehtävän määräaikaan asti.
 
@@ -208,4 +229,4 @@ Voit palauttaa tehtävän uudelleen useita kertoa tehtävän määräaikaan asti
 
 Tämän tehtävän on kehittänyt Teemu Havulinna ja se on lisensoitu [Creative Commons BY-NC-SA -lisenssillä](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-Tehtävän luonnissa on luotu hyödyntämällä kielimalleja ja tekoälytyökaluja, kuten GitHub Copilot ja ChatGPT.
+Tehtävän luonnissa on hyödynnetty kielimalleja ja tekoälytyökaluja, kuten GitHub Copilot ja ChatGPT.
