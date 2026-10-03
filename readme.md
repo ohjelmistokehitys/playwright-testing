@@ -133,10 +133,12 @@ Kirjautuminen onnistuu osoitteessa https://authentication-6o1.pages.dev/. Kirjau
 
 Itse luotavien tunnusten lisäksi sivustolla on kaksi valmista tunnusta, jotka ovat aina voimassa: `alice@example.com` ja `bob@example.com`:
 
-| Nimi  | Tunnus            | Salasana                           | Ympäristömuuttujat GitHubissa \*   |
-|-------|-------------------|------------------------------------|------------------------------------|
-| Alice | alice@example.com | `}3jc\xJnQ=E=+Q_y/%Hd311bW#6{_Oyj` | `USER1_USERNAME`, `USER1_PASSWORD` |
-| Bob   | bob@example.com   | `nUL9zA3q=Nt7\N,0?CL&c74U,Ic)0)dN` | `USER2_USERNAME`, `USER2_PASSWORD` |
+| Nimi     | Tunnus               | Salasana                           | Ympäristömuuttujat GitHubissa \*   |
+|----------|----------------------|------------------------------------|------------------------------------|
+| Jane Doe | jane.doe@example.com | `ItWorksOnMyMac1!`                 | `JANE_USERNAME`, `JANE_PASSWORD`   |
+| John Doe | john.doe@example.com | `AllTestsPass1!`                   | `JOHN_USERNAME`, `JOHN_PASSWORD`   |
+| Alice    | alice@example.com    | `}3jc\xJnQ=E=+Q_y/%Hd311bW#6{_Oyj` | `ALICE_USERNAME`, `ALICE_PASSWORD` |
+| Bob      | bob@example.com      | `nUL9zA3q=Nt7\N,0?CL&c74U,Ic)0)dN` | `BOB_USERNAME`, `BOB_PASSWORD`     |
 
 Voit käyttää näitä tunnuksia niissä testitapauksissa, joissa tarvitset olemassa olevan käyttäjän kirjautumista tai rekisteröitymistä, tai haluat varmistaa, että samalla tunnuksella ei voi rekisteröityä uudelleen.
 
@@ -189,22 +191,22 @@ Lisäksi:
 
 ## 🚀 Käyttäjätunnukset ja salasanat ympäristömuuttujissa (extra)
 
-Käyttäjätunnusten, salasanojen ja API-avainten kirjoittaminen selkokielisinä testitapauksiin ei ole suositeltavaa, sillä ne voivat olla alttiita vahingossa julkaisemiselle. Tässä tapauksessa testijärjestelmän salasanat ovat julkisia, joten ongelma ei ole merkittävä, mutta on hyvä harjoitella myös salasanojen käsittelyä turvallisesti.
+Käyttäjätunnusten, salasanojen ja API-avainten kirjoittaminen selkokielisinä testitapauksiin ei ole suositeltavaa, sillä ne voivat olla alttiita vahingossa julkaisemiselle. Tässä tapauksessa testijärjestelmän salasanat ovat julkisia, joten ongelma ei ole merkittävä, mutta on hyvä harjoitella myös salasanojen käsittelyä turvallisesti. Parempi tapa käsitellä salasanoja voisi olla niiden tallentaminen ympäristömuuttujiin tai salaisuuksiksi. Suosittelemme tutustumaan ympäristömuuttujiin ja hyödyntämään niitä tässä tehtävässä, mutta se ei ole pakollista eikä vaikuta arviointiin.
 
-Parempi tapa käsitellä salasanoja voisi olla niiden tallentaminen ympäristömuuttujiin tai salaisuuksiksi. Playwrightin testit voivat käyttää ympäristömuuttujia, joten voit tallentaa salasanat esimerkiksi `.env`-tiedostoon ja lukea ne testitapauksissa ympäristömuuttujista. Luomasi `.env`-tiedosto puolestaan voidaan rajata versionhallinnan ulkopuolelle [.gitignore-tiedoston](./.gitignore) avulla.
+Yleinen tapa määritellä paikallinen ympäristö on käyttää `.env`-tiedostoa, jossa ympäristömuuttujat määritellään `AVAIN=ARVO`-muodossa. Sikäli kun tiedostot sisältävät salaisuuksia, ne tulee jättää versionhallinnan ulkopuolelle. Ympäristömuuttujat voidaan lukea tiedostosta Playwright-testien alussa tiedostosta käyttämällä Node.js:n ominaisuuksia.
 
-Suosittelemme tutustumaan ympäristömuuttujiin ja hyödyntämään niitä tässä tehtävässä. Voit lukea lisää ympäristömuuttujista [Playwrightin dokumentaatiosta (playwright.dev)](https://playwright.dev/docs/test-parameterize#env-files). Playwrightin dokumentaatiossa ohjeistetaan ympäristömuuttujien käyttöä [dotenv-paketin](https://www.npmjs.com/package/dotenv) kanssa, mutta Node.js:n standardikirjastosta löytyy myös [`loadEnvFile`-funktio](https://nodejs.org/api/process.html#processloadenvfilepath), jolla ympäristömuuttujat voidaan ladata ilman ulkoisia kirjastoja.
+Voit lukea lisää ympäristömuuttujista [Playwrightin dokumentaatiosta (playwright.dev)](https://playwright.dev/docs/test-parameterize#env-files). Playwrightin dokumentaatiossa ohjeistetaan ympäristömuuttujien käyttöä [dotenv-paketin](https://www.npmjs.com/package/dotenv) kanssa, mutta Node.js:n standardikirjastosta löytyy myös [`loadEnvFile`-funktio](https://nodejs.org/api/process.html#processloadenvfilepath), jolla ympäristömuuttujat voidaan ladata ilman ulkoisia kirjastoja.
 
-Oma `.env`-tiedosto voi näyttää esimerkiksi tältä:
-
-```
-USER1_USERNAME=alice@example.com
-USER1_PASSWORD='}3jc\xJnQ=E=+Q_y/%Hd311bW#6{_Oyj'
-USER2_USERNAME=bob@example.com
-USER2_PASSWORD='nUL9zA3q=Nt7\N,0?CL&c74U,Ic)0)dN'
-```
-
-> [!NOTE]
+> [!IMPORTANT]
+> Jotta muuttujat toimivat oikein sekä omassa kehitysympäristössäsi että GitHub actions -arvioinnissa, voit käyttää vain samoja muuttujia, jotka on määritetty GitHub actionsissa. Esimerkin tässä tehtävässä toimivasta .env-tiedostosta löydät [täältä](./.grading/.env.test).
+>
+> Seuraavat ympäristömuuttujat ovat tuettuja tässä tehtävässä:
+>
+> * `JANE_USERNAME` & `JANE_PASSWORD`
+> * `JOHN_USERNAME` & `JOHN_PASSWORD`
+> * `ALICE_USERNAME` & `ALICE_PASSWORD`
+> * `BOB_USERNAME` & `BOB_PASSWORD`
+>
 > Älä lisää omaa .env-tiedostoasi versionhallintaan. GitHub actionsissa on valmiina ympäristömuuttujat, joiden nimet ja arvot vastaavat edellä esitettyjä. Varmista siis, että ne on määritelty samoilla nimillä ja arvoilla kuin tehtävänannossa, jotta testisi toimivat myös automaattisessa arvioinnissa.
 
 

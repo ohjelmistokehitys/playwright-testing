@@ -14,6 +14,21 @@ jobs:
     env:
       CI: true
 
+      # These variables should go in the GitHub secrets, but since this is a public exercise
+      # template, we want to make these available in any forks of the repository as well.
+      # Therefore we are not using secrets but instead storing them here:
+      JANE_USERNAME: jane.doe@example.com
+      JANE_PASSWORD: ItWorksOnMyMac1!
+
+      JOHN_USERNAME: john.doe@example.com
+      JOHN_PASSWORD: AllTestsPass1!
+
+      ALICE_USERNAME: alice@example.com
+      ALICE_PASSWORD: '}3jc\xJnQ=E=+Q_y/%Hd311bW#6{_Oyj'
+
+      BOB_USERNAME: bob@example.com
+      BOB_PASSWORD: 'nUL9zA3q=Nt7\N,0?CL&c74U,Ic)0)dN'
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v7
